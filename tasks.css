@@ -1,0 +1,75 @@
+/* Figma background applied to body */
+body {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: url('3.png') no-repeat center center;
+  background-size: cover;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Task card */
+.tasks-container {
+  width: 800px;
+  border: 1px solid #d1d1d1;
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #ffffffcc; /* semi-transparent so background shows */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.task-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 150px 100px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f0fdf4; /* light green */
+}
+
+.task-row input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.status {
+  padding: 6px 10px;
+  border-radius: 12px;
+  text-align: center;
+  background-color: #c0e4f8;
+}
+
+.deadline {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.course {
+  text-align: center;
+  background-color: #adebeb;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.reference-image {
+  width: 100%;
+  margin-top: 20px;
+  border: 1px dashed #ccc;
+}
