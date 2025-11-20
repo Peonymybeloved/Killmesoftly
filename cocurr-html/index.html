@@ -89,61 +89,80 @@
       const emailtitle = document.querySelector('.emailtitle');
       const emailInput = document.getElementById('emailInput');
       const passwordInput = document.getElementById('passwordInput');
+      let formVisible = false; // tracks whether inputs are shown
 
       signUpBtn.addEventListener('click', function() {
-        // Show and fade in the rectangle background
-        bgRect.style.transition = 'opacity 0.6s ease-in-out';
-        bgRect.style.opacity = '1';
-        emailtitle.style.transition = 'opacity 0.6s ease-in-out';
-        emailtitle.style.opacity = '1';
-        pwtitle.style.transition = 'opacity 0.6s ease-in-out';
-        pwtitle.style.opacity = '1';
-        emailInput.style.transition = 'opacity 0.6s ease-in-out';
-        emailInput.style.opacity = '1';
-        passwordInput.style.transition = 'opacity 0.6s ease-in-out';
-        passwordInput.style.opacity = '1';
-      
-        // Animate logo moving up
-        logo.style.transition = 'top 0.6s ease-in-out';
-        logo.style.top = '80px';
-        // Animate text moving up
-        text.style.transition = 'top 0.6s ease-in-out';
-        text.style.top = '180px';
-        // Move Sign Up button down below the rectangle and center it
-        signUpBtn.style.transition = 'top 0.6s ease-in-out, left 0.6s ease-in-out';
-        signUpBtn.style.top = '570px';
-        signUpBtn.style.left = '47%';
-        signUpBtn.style.transform = 'translateX(-50%)';
-        // Hide Log In button
-        logInBtn.style.transition = 'opacity 0.6s ease-in-out';
-        logInBtn.style.opacity = '0';
+        if (!formVisible) {
+          // First click: show the form inside the rectangle
+          bgRect.style.transition = 'opacity 0.6s ease-in-out';
+          bgRect.style.opacity = '1';
+          emailtitle.style.transition = 'opacity 0.6s ease-in-out';
+          emailtitle.style.opacity = '1';
+          pwtitle.style.transition = 'opacity 0.6s ease-in-out';
+          pwtitle.style.opacity = '1';
+          emailInput.style.transition = 'opacity 0.6s ease-in-out';
+          emailInput.style.opacity = '1';
+          passwordInput.style.transition = 'opacity 0.6s ease-in-out';
+          passwordInput.style.opacity = '1';
+
+          // Animate logo moving up
+          logo.style.transition = 'top 0.6s ease-in-out';
+          logo.style.top = '80px';
+          // Animate text moving up
+          text.style.transition = 'top 0.6s ease-in-out';
+          text.style.top = '180px';
+          // Move Sign Up button down below the rectangle and center it
+          signUpBtn.style.transition = 'top 0.6s ease-in-out, left 0.6s ease-in-out';
+          signUpBtn.style.top = '570px';
+          signUpBtn.style.left = '47%';
+          signUpBtn.style.transform = 'translateX(-50%)';
+          // Hide Log In button
+          logInBtn.style.transition = 'opacity 0.6s ease-in-out';
+          logInBtn.style.opacity = '0';
+
+          formVisible = true;
+          // update label so user knows next press will submit
+          signUpBtn.dataset.originalText = signUpBtn.textContent;
+          signUpBtn.textContent = 'Sign In';
+        } else {
+          // Second click: navigate to homepage (simulate submit)
+          window.location.href = 'homepage.html';
+        }
       });
       
       logInBtn.addEventListener('click', function() {
-        bgRect.style.transition = 'opacity 0.6s ease-in-out';
-        bgRect.style.opacity = '1';
-        emailtitle.style.transition = 'opacity 0.6s ease-in-out';
-        emailtitle.style.opacity = '1';
-        pwtitle.style.transition = 'opacity 0.6s ease-in-out';
-        pwtitle.style.opacity = '1';
-        emailInput.style.transition = 'opacity 0.6s ease-in-out';
-        emailInput.style.opacity = '1';
-        passwordInput.style.transition = 'opacity 0.6s ease-in-out';
-        passwordInput.style.opacity = '1';
-        // Animate logo moving up
-        logo.style.transition = 'top 0.6s ease-in-out';
-        logo.style.top = '80px';
-        // Animate text moving up
-        text.style.transition = 'top 0.6s ease-in-out';
-        text.style.top = '180px';
-        // Move Sign Up button down below the rectangle and center it
-        logInBtn.style.transition = 'top 0.6s ease-in-out, left 0.6s ease-in-out';
-        logInBtn.style.top = '570px';
-        logInBtn.style.left = '47%';
-        logInBtn.style.transform = 'translateX(-50%)';
-        // Hide Log In button
-        signUpBtn.style.transition = 'opacity 0.6s ease-in-out';
-        signUpBtn.style.opacity = '0';
+        if (!formVisible) {
+          bgRect.style.transition = 'opacity 0.6s ease-in-out';
+          bgRect.style.opacity = '1';
+          emailtitle.style.transition = 'opacity 0.6s ease-in-out';
+          emailtitle.style.opacity = '1';
+          pwtitle.style.transition = 'opacity 0.6s ease-in-out';
+          pwtitle.style.opacity = '1';
+          emailInput.style.transition = 'opacity 0.6s ease-in-out';
+          emailInput.style.opacity = '1';
+          passwordInput.style.transition = 'opacity 0.6s ease-in-out';
+          passwordInput.style.opacity = '1';
+          // Animate logo moving up
+          logo.style.transition = 'top 0.6s ease-in-out';
+          logo.style.top = '80px';
+          // Animate text moving up
+          text.style.transition = 'top 0.6s ease-in-out';
+          text.style.top = '180px';
+          // Move Log In button down below the rectangle and center it
+          logInBtn.style.transition = 'top 0.6s ease-in-out, left 0.6s ease-in-out';
+          logInBtn.style.top = '570px';
+          logInBtn.style.left = '47%';
+          logInBtn.style.transform = 'translateX(-50%)';
+          // Hide Sign Up button
+          signUpBtn.style.transition = 'opacity 0.6s ease-in-out';
+          signUpBtn.style.opacity = '0';
+
+          formVisible = true;
+          logInBtn.dataset.originalText = logInBtn.textContent;
+          logInBtn.textContent = 'Sign In';
+        } else {
+          window.location.href = 'homepage.html';
+        }
       });
 
 
