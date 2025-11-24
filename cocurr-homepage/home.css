@@ -1,0 +1,590 @@
+/* GLOBAL STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Fredoka', sans-serif;
+    overflow-x: hidden;
+    background: #f5f5f5;
+}
+
+body {
+    display: flex;
+    color: #333;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+button, input {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ===========================
+   SIDEBAR STYLES
+   =========================== */
+
+.sidebar {
+    width: 80px;
+    background: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    gap: 30px;
+    position: relative;
+    min-height: 100vh;
+}
+
+.nav-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    flex: 1;
+}
+
+.nav-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f0f0f0;
+    border: none;
+    padding: 0;
+}
+
+.nav-icon svg {
+    width: 28px;
+    height: 28px;
+    color: #000;
+}
+
+.nav-icon:hover {
+    background: #e0e0e0;
+    transform: scale(1.05);
+}
+
+.nav-icon.active {
+    background: #000;
+    color: #fff;
+}
+
+.nav-icon.active svg {
+    color: #fff;
+}
+
+/* ICON STYLES */
+.icon-home::before {
+    display: none;
+}
+
+.icon-tasks::before {
+    display: none;
+}
+
+.icon-calendar::before {
+    display: none;
+}
+
+.icon-folder::before {
+    display: none;
+}
+
+.icon-add::before {
+    content: "+";
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.profile-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #20b2aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.profile-icon:hover {
+    background: #1a8a81;
+    transform: scale(1.08);
+}
+
+/* ===========================
+   MAIN CONTENT STYLES
+   =========================== */
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100vh;
+    background: #f5f5f5;
+}
+
+/* TOP HEADER WITH LOGO */
+.top-header {
+    background: #d4e8eb;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.cocurr-logo-img {
+    height: 28px;
+    width: auto;
+    display: block;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.content-area {
+    flex: 1;
+    padding: 0;
+    overflow-y: auto;
+    display: flex;
+    gap: 0;
+    background: #ffffff;
+}
+
+/* ===========================
+   TASKS SECTION
+   =========================== */
+
+.tasks-section {
+    background: white;
+    border-radius: 0;
+    padding: 30px 40px;
+    box-shadow: none;
+    flex: 1;
+    overflow: hidden;
+    margin: 0;
+    border: none;
+}
+
+.tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tasks-table thead {
+    background: white;
+    border-bottom: 2px solid #20b2aa;
+}
+
+.tasks-table th {
+    text-align: left;
+    padding: 18px 16px;
+    font-weight: 500;
+    color: #20b2aa;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    border-right: 1px solid #e8f0f2;
+}
+
+.tasks-table th:last-child {
+    border-right: none;
+}
+
+.tasks-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e8f0f2;
+    border-right: 1px solid #e8f0f2;
+    font-size: 14px;
+}
+
+.tasks-table td:last-child {
+    border-right: none;
+}
+
+.checkbox-cell {
+    text-align: center;
+    background: white;
+}
+
+.task-cell {
+    color: #333;
+    background: white;
+    min-width: 250px;
+}
+
+.status-cell {
+    text-align: center;
+    background: #d4e8eb;
+}
+
+.deadline-cell {
+    background: #e0f2f5;
+}
+
+.course-cell {
+    background: #20b2aa;
+}
+
+.tasks-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.tasks-table tbody tr:hover .task-cell {
+    background-color: #fafafa;
+}
+
+.tasks-table tbody tr:hover .checkbox-cell {
+    background-color: #fafafa;
+}
+
+.tasks-table tbody tr.input-row {
+    background: white;
+}
+
+.tasks-table tbody tr.input-row .checkbox-cell {
+    background: white;
+}
+
+.tasks-table tbody tr.input-row .task-cell {
+    background: white;
+}
+
+.tasks-table tbody tr.input-row .status-cell {
+    background: #d4e8eb;
+}
+
+.tasks-table tbody tr.input-row .deadline-cell {
+    background: #e0f2f5;
+}
+
+.tasks-table tbody tr.input-row .course-cell {
+    background: #20b2aa;
+}
+
+.task-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #20b2aa;
+}
+
+.task-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+    font-weight: 400;
+}
+
+.task-checkmark-icon {
+    width: 18px;
+    height: 18px;
+    border: 2px dashed #20b2aa;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #20b2aa;
+    font-weight: bold;
+}
+
+/* INPUT FIELDS FOR NEW TASK */
+.task-input,
+.status-input,
+.deadline-input,
+.course-input {
+    width: 100%;
+    padding: 4px 0;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    color: #666;
+    outline: none;
+}
+
+.task-input::placeholder,
+.status-input::placeholder,
+.deadline-input::placeholder,
+.course-input::placeholder {
+    color: #bbb;
+}
+
+.task-input:focus,
+.status-input:focus,
+.deadline-input:focus,
+.course-input:focus {
+    background: transparent;
+    color: #333;
+}
+
+/* STATUS BADGES */
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-badge.wip {
+    background: #d4e8eb;
+    color: #0d7a8a;
+}
+
+.status-badge.completed {
+    background: #c8e6c9;
+    color: #2e7d32;
+}
+
+.status-badge.pending {
+    background: #ffe0b2;
+    color: #e65100;
+}
+
+.status-badge.overdue {
+    background: #ffcdd2;
+    color: #c62828;
+}
+
+.deadline {
+    color: #333;
+    font-size: 13px;
+}
+
+.course-code {
+    background: #20b2aa;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+    color: white;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+/* ===========================
+   SIDEBAR PANEL (Optional right panel)
+   =========================== */
+
+.side-panel {
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: none;
+}
+
+.side-panel.active {
+    display: block;
+}
+
+.side-panel h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.side-panel ul {
+    list-style: none;
+}
+
+.side-panel li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.side-panel li:last-child {
+    border-bottom: none;
+}
+
+.side-panel a {
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.side-panel a:hover {
+    color: #20b2aa;
+}
+
+/* ===========================
+   BOTTOM ACCENT BAR
+   =========================== */
+
+.bottom-accent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #20b2aa 0%, #48d1cc 100%);
+}
+
+/* ===========================
+   SCROLLBAR STYLING
+   =========================== */
+
+.content-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+
+.content-area::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+
+@media (max-width: 1200px) {
+    .content-area {
+        padding: 30px;
+        gap: 20px;
+    }
+
+    .tasks-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+        gap: 20px;
+    }
+
+    .logo {
+        font-size: 14px;
+    }
+
+    .nav-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+
+    .content-header {
+        padding: 20px;
+    }
+
+    .content-header h1 {
+        font-size: 24px;
+    }
+
+    .content-area {
+        padding: 20px;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .tasks-section {
+        padding: 15px;
+    }
+
+    .tasks-table th,
+    .tasks-table td {
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+
+    .side-panel {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 60px;
+        padding-top: 15px;
+        gap: 15px;
+    }
+
+    .nav-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .profile-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .content-header h1 {
+        font-size: 20px;
+    }
+
+    .content-area {
+        padding: 15px;
+    }
+
+    .tasks-section {
+        padding: 12px;
+    }
+
+    .tasks-table th,
+    .tasks-table td {
+        padding: 10px 6px;
+        font-size: 11px;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+
+    .course-code {
+        padding: 4px 6px;
+        font-size: 10px;
+    }
+}

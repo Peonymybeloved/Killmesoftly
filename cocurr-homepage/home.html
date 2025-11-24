@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoCurr - Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+        <nav class="nav-icons">
+            <button class="nav-icon icon-home active" title="Home" aria-label="Home">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="nav-icon icon-tasks" title="Tasks" aria-label="Tasks">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="2" width="16" height="20" rx="2" fill="currentColor"/>
+                    <rect x="9" y="1" width="6" height="2" fill="currentColor"/>
+                    <line x1="8" y1="8" x2="14" y2="8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="8" y1="12" x2="12" y2="12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                    <polyline points="14,11 15.5,12.5 17,11" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="8" y1="16" x2="14" y2="16" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <button class="nav-icon icon-calendar" title="Calendar" aria-label="Calendar">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="4" width="18" height="18" rx="2" fill="currentColor"/>
+                    <rect x="3" y="4" width="18" height="4" fill="currentColor"/>
+                    <line x1="9" y1="8" x2="9" y2="22" stroke="white" stroke-width="1"/>
+                    <line x1="15" y1="8" x2="15" y2="22" stroke="white" stroke-width="1"/>
+                    <line x1="3" y1="12" x2="21" y2="12" stroke="white" stroke-width="1"/>
+                    <line x1="3" y1="16" x2="21" y2="16" stroke="white" stroke-width="1"/>
+                    <line x1="3" y1="20" x2="21" y2="20" stroke="white" stroke-width="1"/>
+                </svg>
+            </button>
+            <button class="nav-icon icon-folder" title="Files" aria-label="Files">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 5C3 3.89543 3.89543 3 5 3H10L12 5H21C22.1046 5 23 5.89543 23 7V19C23 20.1046 22.1046 21 21 21H3C1.89543 21 1 20.1046 1 19V5Z" fill="currentColor"/>
+                </svg>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <div class="header-left">
+                <img src="cocurr-logo.svg" alt="COCURR Logo" class="cocurr-logo-img">
+            </div>
+            <div class="header-right">
+                <button class="profile-icon" title="Profile" aria-label="Profile Menu">T</button>
+            </div>
+        </header>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+            <!-- TASKS SECTION -->
+            <section class="tasks-section">
+                <table class="tasks-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;"></th>
+                            <th style="width: 30%;" class="th-tasks">Tasks</th>
+                            <th style="width: 18%;" class="th-status">Status</th>
+                            <th style="width: 24%;" class="th-deadline">Deadline</th>
+                            <th style="width: 20%;" class="th-course">Course</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- TASK ROW 1 -->
+                        <tr class="task-row">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="task-checkbox" aria-label="Select task 1">
+                            </td>
+                            <td class="task-cell">
+                                <div class="task-name">
+                                    <span class="task-checkmark-icon">✓</span>
+                                    Do CSCC 32 B Prototype
+                                </div>
+                            </td>
+                            <td class="status-cell">
+                                <span class="status-badge wip">WIP</span>
+                            </td>
+                            <td class="deadline-cell">Sep 21, 2025: 1159PM</td>
+                            <td class="course-cell"><span class="course-code">CSCC 32.1 B</span></td>
+                        </tr>
+
+                        <!-- TASK ROW 2 -->
+                        <tr class="task-row">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="task-checkbox" aria-label="Select task 2">
+                            </td>
+                            <td class="task-cell">
+                                <div class="task-name">
+                                    <span class="task-checkmark-icon">✓</span>
+                                    Do CSCC 32 B Prototype
+                                </div>
+                            </td>
+                            <td class="status-cell">
+                                <span class="status-badge wip">WIP</span>
+                            </td>
+                            <td class="deadline-cell">Sep 21, 2025: 1159PM</td>
+                            <td class="course-cell"><span class="course-code">CSCC 32.1 B</span></td>
+                        </tr>
+
+                        <!-- TASK ROW 3 -->
+                        <tr class="task-row">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="task-checkbox" aria-label="Select task 3">
+                            </td>
+                            <td class="task-cell">
+                                <div class="task-name">
+                                    <span class="task-checkmark-icon">✓</span>
+                                    Do CSCC 32 B Prototype
+                                </div>
+                            </td>
+                            <td class="status-cell">
+                                <span class="status-badge wip">WIP</span>
+                            </td>
+                            <td class="deadline-cell">Sep 21, 2025: 1159PM</td>
+                            <td class="course-cell"><span class="course-code">CSCC 32.1 B</span></td>
+                        </tr>
+
+                        <!-- NEW TASK INPUT ROW -->
+                        <tr class="task-row input-row">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="task-checkbox" aria-label="Select new task">
+                            </td>
+                            <td class="task-cell">
+                                <input type="text" class="task-input" placeholder="" aria-label="New task name">
+                            </td>
+                            <td class="status-cell">
+                                <input type="text" class="status-input" placeholder="" aria-label="Task status">
+                            </td>
+                            <td class="deadline-cell">
+                                <input type="text" class="deadline-input" placeholder="" aria-label="Task deadline">
+                            </td>
+                            <td class="course-cell">
+                                <input type="text" class="course-input" placeholder="" aria-label="Course code">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+        <!-- BOTTOM ACCENT BAR -->
+        <div class="bottom-accent"></div>
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="home.js"></script>
+</body>
+</html>
