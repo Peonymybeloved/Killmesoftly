@@ -89,7 +89,27 @@
       const emailtitle = document.querySelector('.emailtitle');
       const emailInput = document.getElementById('emailInput');
       const passwordInput = document.getElementById('passwordInput');
+      const emailcaption = document.querySelector('.emailcaption');
+      const pwcaption = document.querySelector('.pwcaption');
       let formVisible = false; // tracks whether inputs are shown
+
+      // Basic client-side email format check
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function showFieldError(inputEl, captionEl, message) {
+        inputEl.style.borderColor = '#e74c3c';
+        captionEl.textContent = message;
+        captionEl.style.color = '#e74c3c';
+        captionEl.style.opacity = '1';
+      }
+
+      function clearFieldError(inputEl, captionEl) {
+        inputEl.style.borderColor = '#aaa';
+        captionEl.textContent = '';
+        captionEl.style.opacity = '0';
+      }
 
       signUpBtn.addEventListener('click', function() {
         if (!formVisible) {
@@ -125,7 +145,30 @@
           signUpBtn.dataset.originalText = signUpBtn.textContent;
           signUpBtn.textContent = 'Sign In';
         } else {
-          // Second click: navigate to homepage (simulate submit)
+          // Second click: validate before navigating
+          const emailVal = (emailInput.value || '').trim();
+          const pwVal = (passwordInput.value || '').trim();
+          // clear previous errors
+          clearFieldError(emailInput, emailcaption);
+          clearFieldError(passwordInput, pwcaption);
+
+          if (!emailVal) {
+            showFieldError(emailInput, emailcaption, 'Email is required');
+            emailInput.focus();
+            return;
+          }
+          if (!isValidEmail(emailVal)) {
+            showFieldError(emailInput, emailcaption, 'Please enter a valid email');
+            emailInput.focus();
+            return;
+          }
+          if (!pwVal) {
+            showFieldError(passwordInput, pwcaption, 'Password is required');
+            passwordInput.focus();
+            return;
+          }
+
+          // All client-side checks passed — proceed to homepage
           window.location.href = 'homepage.html';
         }
       });
@@ -161,7 +204,49 @@
           logInBtn.dataset.originalText = logInBtn.textContent;
           logInBtn.textContent = 'Sign In';
         } else {
-          window.location.href = 'homepage.html';
+          // validate before sending to server
+          const emailVal = (emailInput.value || '').trim();
+          const pwVal = (passwordInput.value || '').trim();
+          clearFieldError(emailInput, emailcaption);
+          clearFieldError(passwordInput, pwcaption);
+          if (!emailVal) {
+            showFieldError(emailInput, emailcaption, 'Email is required');
+            emailInput.focus();
+            return;
+          }
+          if (!isValidEmail(emailVal)) {
+            showFieldError(emailInput, emailcaption, 'Please enter a valid email');
+            emailInput.focus();
+            return;
+          }
+          if (!pwVal) {
+            showFieldError(passwordInput, pwcaption, 'Password is required');
+            passwordInput.focus();
+            return;
+          }
+
+          // send credentials to server for verification
+          fetch('../cocurr/login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailVal, password: pwVal }),
+            credentials: 'include'
+          })
+          .then(r => r.json().then(j => ({ status: r.status, json: j })))
+          .then(({ status, json }) => {
+            if (status === 200 && json.ok) {
+              // successful login — redirect to homepage
+              window.location.href = 'homepage.html';
+            } else {
+              // show error returned by server
+              const message = json && json.error ? json.error : 'Login failed';
+              showFieldError(passwordInput, pwcaption, message);
+            }
+          })
+          .catch(err => {
+            showFieldError(passwordInput, pwcaption, 'Network or server error');
+            console.error(err);
+          });
         }
       });
 
