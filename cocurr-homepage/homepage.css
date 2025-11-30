@@ -1,0 +1,211 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Hanken Grotesk', Arial, sans-serif;
+  font-weight: 700;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #A0E5E0; /* fallback color */
+}
+
+/* Container */
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: url('images/background.svg') no-repeat center center;
+  background-size: cover;
+}
+
+/* Optional shiny overlay */
+.container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 180px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  z-index: 10;
+  /* Removed semi-transparent background to unify color */
+}
+
+/* Sidebar Icons */
+.sidebar-icon {
+  height: 90px;
+  width: 90px;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.sidebar-icon:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.sidebar-icon.active {
+  transform: scale(1.2);
+  opacity: 1;
+  border-radius: 12px;
+  background-color: #C2ECE3;
+}
+
+/* Assign images */
+.sidebar-icon.tasks { 
+  background-image: url('images/task-icon.svg'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+}
+.sidebar-icon.calendar { 
+  background-image: url('images/calendar-icon.svg'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+}
+.sidebar-icon.folder { 
+  background-image: url('images/folder-icon.svg'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+}
+
+/* Logo */
+.cocurr-logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 320px;
+  height: 70px;
+  background: url('images/cocurr-logo.png') no-repeat center;
+  background-size: contain;
+  z-index: 10;
+}
+
+/* Table Headers */
+.table-headers {
+  position: absolute;
+  top: 150px;
+  left: 220px; 
+  width: calc(100vw - 260px);
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  z-index: 5;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 32px;
+  color: #579F9E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 65px;
+}
+
+.check-header { flex: 0 0 75px; }
+.task-header { flex: 3; justify-content: flex-start; padding-left: 25px; }
+.deadline-header { flex: 1; justify-content: center; }
+.status-header { flex: 1; justify-content: center; }
+.course-header { flex: 1; justify-content: center; }
+
+/* Task Table */
+.task-table {
+  position: absolute;
+  top: 220px;
+  left: 220px;
+  width: calc(100vw - 260px);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  z-index: 5;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+/* Check Task */
+.check-task {
+  flex: 0 0 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: url('images/check-task.svg') no-repeat center;
+  background-size: contain;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.check-task:hover { transform: scale(1.1); }
+
+.check-task.checked {
+  background: url('images/check-task-done.svg') no-repeat center;
+  background-size: contain;
+  opacity: 0.7;
+}
+
+/* Task Bubbles */
+.task-bubble,
+.deadline-bubble,
+.wip-bubble,
+.cscc-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  padding: 0 25px;
+  height: 65px;
+  color: #1b1b1b;
+  flex-shrink: 0;
+}
+
+.task-bubble { flex: 3; justify-content: flex-start; background-color: #C2ECE3; }
+.deadline-bubble { flex: 1; justify-content: center; background-color: #B8D4E0; }
+.wip-bubble { flex: 1; justify-content: center; background-color: #7DDFDD; }
+.cscc-bubble { flex: 1; justify-content: center; background-color: #7DDFDD; }
+
+/* Checked Task Text */
+.task-bubble.checked {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

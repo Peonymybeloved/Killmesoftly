@@ -1,0 +1,150 @@
+/* Reset default margins */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Hanken Grotesk', sans-serif;
+    background: #FFFFFF;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Background */
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('../images/background.png') no-repeat center center;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* CoCurr Logo */
+.logo {
+    position: absolute;
+    top: 13px;
+    left: 14px;
+    width: 267px;
+    height: 48px;
+}
+
+/* Sidebar */
+.sidebar {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+}
+
+.sidebar-icon {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.sidebar-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Top-right button */
+.top-button {
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    width: 48px;
+    height: 51px;
+    background: #116867;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.top-button span {
+    font-size: 24px;
+    font-weight: 400;
+    color: #FFFFFF;
+}
+
+/* Course Folders Container */
+.course-folders {
+    position: absolute;
+    top: 120px;
+    left: 180px;
+    display: flex;
+    gap: 50px; /* spacing between folders */
+}
+
+/* Individual Folders */
+.folder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative; /* for tooltip */
+}
+
+/* Folder Images */
+.folder img {
+    width: 188px;
+    height: 188px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover and Click Animations */
+.folder img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.folder img:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Folder Tooltip */
+.folder span {
+    display: none;
+    position: absolute;
+    top: 210px; /* below folder */
+    font-size: 18px;
+    background-color: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.folder:hover span {
+    display: block;
+}
+
+/* Add Folder Icon (smaller) */
+.add-folder img {
+    width: 120px;
+    height: 120px;
+    filter: brightness(0.8);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.add-folder img:hover {
+    transform: scale(1.1);
+}
+
+
