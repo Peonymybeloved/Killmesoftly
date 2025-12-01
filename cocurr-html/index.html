@@ -169,7 +169,7 @@
           }
 
           // All client-side checks passed — proceed to homepage
-          window.location.href = 'homepage.html';
+          window.location.href = 'home.html';
         }
       });
       
@@ -236,7 +236,7 @@
           .then(({ status, json }) => {
             if (status === 200 && json.ok) {
               // successful login — redirect to homepage
-              window.location.href = 'homepage.html';
+              window.location.href = 'home.html';
             } else {
               // show error returned by server
               const message = json && json.error ? json.error : 'Login failed';
