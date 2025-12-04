@@ -4,8 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CoCurr Landing Page</title>
-
-    <!-- Google Fonts -->
+    <script type="module" src="firebaseauth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+    <script type="module">
+    import { firebaseSignUp, firebaseLogin } from './firebaseauth.js';
+    window.firebaseSignUp = firebaseSignUp;
+    window.firebaseLogin = firebaseLogin;
+  </script>
+    <!--------------------------------------------------------------------------------------------------------------------------->
+    <!----------                                              Google Fonts                                             ---------->
+    <!--------------------------------------------------------------------------------------------------------------------------->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -37,8 +45,7 @@
         font-family: inherit;
         cursor: pointer;
       }
-      /* Make the main landing page fill the browser */
-      .landing-page-container1 {
+      .landing-page-container1 {/* Make the main landing page fill the browser */
         width: 100vw;
         height: 100vh;
         position: relative;
@@ -47,6 +54,32 @@
     </style>
   </head>
   <body>
+    <!--------------------------------------------------------------------------------------------------------------------------->
+    <!----------                                              FIREBASE                                                 ---------->
+    <!--------------------------------------------------------------------------------------------------------------------------->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/VERSION/firebase-app.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use -->
+  <!-- For Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/VERSION/firebase-auth.js"></script>
+  <script>
+    // Your custom Firebase project configuration object goes here
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFD3eK8SmP4z_eXAoiPzNN0gRnhxyum-U",
+      authDomain: "cocurr-sofeng.firebaseapp.com",
+      databaseURL: "https://cocurr-sofeng-default-rtdb.firebaseio.com",
+      projectId: "cocurr-sofeng",
+      storageBucket: "cocurr-sofeng.firebasestorage.app",
+      messagingSenderId: "387943862464",
+      appId: "1:387943862464:web:d6f4f44572d6f571fadd25",
+      measurementId: "G-69R2GW6RPB"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+    <!--------------------------------------------------------------------------------------------------------------------------->
+    <!----------                                              GUI                                                      ---------->
+    <!--------------------------------------------------------------------------------------------------------------------------->
     <div class="landing-page-container1">
       <img
         alt="background14"
@@ -56,15 +89,7 @@
       />
       <!-- Rounded rectangle background (hidden by default) -->
       <div id="bgRect" style="position:absolute; top:250px; left:435px; width:573px; height:289px; background-color:#ffffff; border-radius:30px; opacity:0; z-index:0; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
-      <!-- Password-->
-        <span class="emailtitle" style="position:absolute; top:260px; left:460px; font-size:1.5rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Email</span>
-        <span class="pwtitle" style="position:absolute; top:360px; left:460px; font-size:1.5rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Password</span>
-        <input type="email" id="emailInput" name="email" placeholder="Enter your email" style="position:absolute; top:310px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;" required>
-        <input type="password" id="passwordInput" name="password" placeholder="Enter your password" style="position:absolute; top:410px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;" required>
-        <span class="pwcaption" style="position:absolute; top:500px; left:460px; font-size:1rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Enter your password</span>
-        <span class="emailcaption" style="position:absolute; top:500px; left:460px; font-size:1rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Enter your email</span>
-
-        <!-- LOGO -->
+      <!-- LOGO -->
       <img
         alt="CoCurrLogo13"
         src="public/cocurrlogo13-wk3a-200h.png"
@@ -74,11 +99,24 @@
       <span class="cocurrtagline" style="position:absolute; top:400px; left:520px; font-size:2rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:1;">
         <span>Coordinate your Curriculum</span>
       </span>
-      <!-- LANDING PAGE BUTTONS -->
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <!----------                                     LOGIN/SIGNUP BUTTON                                               ---------->
+      <!--------------------------------------------------------------------------------------------------------------------------->
       <button class="landing-page-button1" id= "logInBtn" style="position:absolute;font-size:20px; top:470px; left:800px; background-color:#fff; color:#000000; padding:20px 24px; border-radius:20px; border:none; font-family:'Hanken Grotesk', sans-serif;">Log In</button>
       <button class="landing-page-button2" id="signUpBtn" style="position:absolute;font-size:20px; top:470px; left:544px; background-color:#fff; color:#000000; padding:20px 24px; border-radius:20px; border:none; font-family:'Hanken Grotesk', sans-serif;">Sign Up</button>
-    </div>
-
+      </div>
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <!----------                                              PW/EMAIL                                                 ---------->
+      <!--------------------------------------------------------------------------------------------------------------------------->
+        <span class="emailtitle" style="position:absolute; top:260px; left:460px; font-size:1.5rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Email</span>
+        <span class="pwtitle" style="position:absolute; top:360px; left:460px; font-size:1.5rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Password</span>
+        <input type="email" id="emailInput" name="email" placeholder="Enter your email" style="position:absolute; top:310px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;" required>
+        <input type="password" id="passwordInput" name="password" placeholder="Enter your password" style="position:absolute; top:410px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;" required>
+        <span class="pwcaption" style="position:absolute; top:500px; left:460px; font-size:1rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Enter your password</span>
+        <span class="emailcaption" style="position:absolute; top:500px; left:460px; font-size:1rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Enter your email</span>
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <!----------                                              INIT                                                     ---------->
+      <!--------------------------------------------------------------------------------------------------------------------------->
     <script>
       const signUpBtn = document.getElementById('signUpBtn');
       const logInBtn = document.getElementById('logInBtn');
@@ -169,7 +207,8 @@
           }
 
           // All client-side checks passed — proceed to homepage
-          window.location.href = '../cocurr-homepage/homepage.html';
+          firebaseSignUp(emailVal, pwVal);
+          //window.location.href = '../cocurr-homepage/homepage.html';
         }
       });
       
@@ -236,7 +275,8 @@
           .then(({ status, json }) => {
             if (status === 200 && json.ok) {
               // successful login — redirect to homepage
-              window.location.href = '../cocurr-homepage/homepage.html';
+              //window.location.href = '../cocurr-homepage/homepage.html';
+              firebaseLogin(emailVal, pwVal);
             } else {
               // show error returned by server
               const message = json && json.error ? json.error : 'Login failed';
