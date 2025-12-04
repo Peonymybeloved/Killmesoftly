@@ -1,69 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoCurr Landing Page</title>
-    <script type="module" src="firebaseauth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
-    <script type="module">
-    import { firebaseSignUp, firebaseLogin } from './firebaseauth.js';
-    window.firebaseSignUp = firebaseSignUp;
-    window.firebaseLogin = firebaseLogin;
-  </script>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <!----------                                              Google Fonts                                             ---------->
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CoCurr Landing Page</title>
+  <link rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <!----------                                              Google Fonts                                             ---------->
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <!----------                                                   GUI                                                  ---------->
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    html,body { height:100%; font-family: 'Fredoka', system-ui, sans-serif; background:#f8f8f8; color:#222; }
+    img { display:block; max-width:100%; height:auto; }
+    button { font-family: inherit; cursor:pointer; }
 
-    <!-- Reset -->
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html, body {
-        width: 100%;
-        height: 100%;
-        font-family: 'Inter', sans-serif;
-        overflow-x: hidden;
-      }
-      body {
-        background: #f8f8f8;
-        color: #333;
-      }
-      img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-      }
-      button {
-        font-family: inherit;
-        cursor: pointer;
-      }
-      .landing-page-container1 {/* Make the main landing page fill the browser */
-        width: 100vw;
-        height: 100vh;
-        position: relative;
-        overflow: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <!----------                                              FIREBASE                                                 ---------->
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/VERSION/firebase-app.js"></script>
-  <!-- TODO: Add SDKs for Firebase products that you want to use -->
-  <!-- For Authentication -->
-  <script src="https://www.gstatic.com/firebasejs/VERSION/firebase-auth.js"></script>
-  <script>
-    // Your custom Firebase project configuration object goes here
+    .landing-page-container1 {
+      width:100vw; height:100vh; position:relative; overflow:hidden;
+    }
+    #bgRect { /* bg rectangle for form */
+      position:absolute;
+      top:250px; left:435px;
+      width:573px; height:289px;
+      background:#fff;
+      border-radius:30px;
+      opacity:0;
+      z-index:0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(0);
+    }
+    .landing-page-co-curr-logo {
+      position:absolute; top:300px; left:500px; height:80px; z-index:1;
+      transition: top 0.6s ease;
+    }
+    .cocurrtagline {
+      position:absolute; top:400px; left:520px; font-size:2rem; color:#000; z-index:1;
+      transition: top 0.6s ease;
+    }
+    body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: url('images/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.main-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.38);
+}
+  /*---------------------------------------------------------------------------------------------------------------------------*/
+  /*----------                                                   BUTTON                                              ----------*/
+  /*---------------------------------------------------------------------------------------------------------------------------*/
+    .landing-page-button1, .landing-page-button2 {
+      position:absolute; top:470px; font-size:20px; background:#fff; color:#000;
+      padding:16px 22px; border-radius:20px; border:none; z-index:2; transition: all 0.6s ease;
+    }
+    #logInBtn { left:800px; }
+    #signUpBtn { left:544px; }
+
+  /*---------------------------------------------------------------------------------------------------------------------------*/
+  /*----------                                                   PW/EMAIL                                            ----------*/
+  /*---------------------------------------------------------------------------------------------------------------------------*/
+    .emailtitle, .pwtitle, .emailcaption, .pwcaption {
+      position:absolute; left:460px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;
+      transition: opacity 0.6s ease;
+    }
+    .emailtitle { top:260px; font-size:1.5rem; }
+    .pwtitle { top:360px; font-size:1.5rem; }
+    #emailInput { position:absolute; top:310px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; z-index:10; opacity:0; transition: opacity 0.6s ease, border-color .2s ease; }
+    #passwordInput { position:absolute; top:410px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; z-index:10; opacity:0; transition: opacity 0.6s ease, border-color .2s ease; }
+    .emailcaption { top:500px; left:460px; font-size:1rem; color:#000; opacity:0; transition: opacity 0.2s ease; }
+    .pwcaption { top:500px; left:460px; font-size:1rem; color:#000; opacity:0; transition: opacity 0.2s ease; }
+
+  /*---------------------------------------------------------------------------------------------------------------------------*/
+  /*----------                                            BUTTON RESPONSE                                            ----------*/
+  /*---------------------------------------------------------------------------------------------------------------------------*/
+    .caption-error { color:#e74c3c; opacity:1 !important; }/* Error style for captions */
+    .centered {/* Centered button when active */
+      left:50% !important;
+      transform: translateX(-50%);
+    }
+    .hidden { display:none !important; opacity:0 !important; pointer-events:none !important; }/* Hide element */
+    @media (max-width:1000px){/* small responsive tweak */
+      #bgRect { left:10%; width:80%; }
+      .landing-page-co-curr-logo { left:12%; top:80px; }
+      .cocurrtagline { left:12%; top:160px; font-size:1.6rem; }
+      #emailInput, #passwordInput, .emailtitle, .pwtitle { left:12%; width:76%; }
+      .landing-page-button1, .landing-page-button2 { left:12%; top: 520px; }
+    }
+  </style>
+</head>
+<body>
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <!----------                                              INIT                                                     ---------->
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <div class="landing-page-container1">
+    <img alt="background14" src="public/background14-k63n-1900w.png" class="landing-page-background" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1;" />
+    <div id="bgRect"></div>
+    <img alt="CoCurrLogo13" src="public/cocurrlogo13-wk3a-200h.png" class="landing-page-co-curr-logo" />
+    <span class="cocurrtagline"><span>Coordinate your Curriculum</span></span>
+    <!-- Buttons -->
+    <button id="logInBtn" class="landing-page-button1">Log In</button>
+    <button id="signUpBtn" class="landing-page-button2">Sign Up</button>
+    <!-- Form / Labels -->
+    <span class="emailtitle">Email</span>
+    <input type="email" id="emailInput" name="email" placeholder="Enter your email" required />
+    <span class="pwtitle">Password</span>
+    <input type="password" id="passwordInput" name="password" placeholder="Enter your password" required />
+    <span class="pwcaption" id="pwcaption">Enter your password</span>
+    <span class="emailcaption" id="emailcaption">Enter your email</span>
+  </div>
+
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <!----------                                          FIREBASE                                                     ---------->
+  <!--------------------------------------------------------------------------------------------------------------------------->
+  <script type="module">
+    // Firebase v12 modular imports 
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
     const firebaseConfig = {
       apiKey: "AIzaSyBFD3eK8SmP4z_eXAoiPzNN0gRnhxyum-U",
       authDomain: "cocurr-sofeng.firebaseapp.com",
@@ -74,223 +148,261 @@
       appId: "1:387943862464:web:d6f4f44572d6f571fadd25",
       measurementId: "G-69R2GW6RPB"
     };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-  </script>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <!----------                                              GUI                                                      ---------->
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <div class="landing-page-container1">
-      <img
-        alt="background14"
-        src="public/background14-k63n-1900w.png"
-        class="landing-page-background"
-        style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1;"
-      />
-      <!-- Rounded rectangle background (hidden by default) -->
-      <div id="bgRect" style="position:absolute; top:250px; left:435px; width:573px; height:289px; background-color:#ffffff; border-radius:30px; opacity:0; z-index:0; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
-      <!-- LOGO -->
-      <img
-        alt="CoCurrLogo13"
-        src="public/cocurrlogo13-wk3a-200h.png"
-        class="landing-page-co-curr-logo"
-        style="position:absolute; top:300px; left:500px; width:auto; height:80px; z-index:1;"
-      />
-      <span class="cocurrtagline" style="position:absolute; top:400px; left:520px; font-size:2rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:1;">
-        <span>Coordinate your Curriculum</span>
-      </span>
-      <!--------------------------------------------------------------------------------------------------------------------------->
-      <!----------                                     LOGIN/SIGNUP BUTTON                                               ---------->
-      <!--------------------------------------------------------------------------------------------------------------------------->
-      <button class="landing-page-button1" id= "logInBtn" style="position:absolute;font-size:20px; top:470px; left:800px; background-color:#fff; color:#000000; padding:20px 24px; border-radius:20px; border:none; font-family:'Hanken Grotesk', sans-serif;">Log In</button>
-      <button class="landing-page-button2" id="signUpBtn" style="position:absolute;font-size:20px; top:470px; left:544px; background-color:#fff; color:#000000; padding:20px 24px; border-radius:20px; border:none; font-family:'Hanken Grotesk', sans-serif;">Sign Up</button>
-      </div>
-      <!--------------------------------------------------------------------------------------------------------------------------->
-      <!----------                                              PW/EMAIL                                                 ---------->
-      <!--------------------------------------------------------------------------------------------------------------------------->
-        <span class="emailtitle" style="position:absolute; top:260px; left:460px; font-size:1.5rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Email</span>
-        <span class="pwtitle" style="position:absolute; top:360px; left:460px; font-size:1.5rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Password</span>
-        <input type="email" id="emailInput" name="email" placeholder="Enter your email" style="position:absolute; top:310px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;" required>
-        <input type="password" id="passwordInput" name="password" placeholder="Enter your password" style="position:absolute; top:410px; left:460px; padding:12px; border-radius:6px; border:1px solid #aaa; width:500px; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;" required>
-        <span class="pwcaption" style="position:absolute; top:500px; left:460px; font-size:1rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Enter your password</span>
-        <span class="emailcaption" style="position:absolute; top:500px; left:460px; font-size:1rem; color:#000000; font-family:'Fredoka', sans-serif; z-index:10; opacity:0;">Enter your email</span>
-      <!--------------------------------------------------------------------------------------------------------------------------->
-      <!----------                                              INIT                                                     ---------->
-      <!--------------------------------------------------------------------------------------------------------------------------->
-    <script>
-      const signUpBtn = document.getElementById('signUpBtn');
-      const logInBtn = document.getElementById('logInBtn');
-      const logo = document.querySelector('.landing-page-co-curr-logo');
-      const text = document.querySelector('.cocurrtagline');
-      const bgRect = document.getElementById('bgRect');
-      const pwtitle = document.querySelector('.pwtitle');
-      const emailtitle = document.querySelector('.emailtitle');
-      const emailInput = document.getElementById('emailInput');
-      const passwordInput = document.getElementById('passwordInput');
-      const emailcaption = document.querySelector('.emailcaption');
-      const pwcaption = document.querySelector('.pwcaption');
-      let formVisible = false; // tracks whether inputs are shown
+    const app = initializeApp(firebaseConfig);// Initialize Firebase
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    
+    const signUpBtn = document.getElementById('signUpBtn');
+    const logInBtn = document.getElementById('logInBtn');
+    const logo = document.querySelector('.landing-page-co-curr-logo');
+    const text = document.querySelector('.cocurrtagline');
+    const bgRect = document.getElementById('bgRect');
+    const pwtitle = document.querySelector('.pwtitle');
+    const emailtitle = document.querySelector('.emailtitle');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const emailcaption = document.getElementById('emailcaption');
+    const pwcaption = document.getElementById('pwcaption');
 
-      // Basic client-side email format check
-      function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // state
+    let formVisible = false;    // has the inputs been shown?
+    let currentMode = null;     // 'signup' or 'login'
+
+  //---------------------------------------------------------------------------------------------------------------------------//
+  //----------                                              UTIL                                                     ----------//
+  //---------------------------------------------------------------------------------------------------------------------------//
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function showFieldError(inputEl, captionEl, message) {
+      inputEl.style.borderColor = '#e74c3c';
+      captionEl.textContent = message;
+      captionEl.classList.add('caption-error');
+    }
+    function clearFieldError(inputEl, captionEl) {
+      inputEl.style.borderColor = '#aaa';
+      captionEl.textContent = '';
+      captionEl.classList.remove('caption-error');
+      captionEl.style.opacity = '0';
+    }
+    function revealForm(mode, triggerBtn, otherBtn) {// show form animation (shared)
+      currentMode = mode; // 'signup' or 'login'
+      formVisible = true;
+      // reveal rectangle and inputs
+      bgRect.style.opacity = '1';
+      bgRect.style.transform = 'translateY(-6px)';
+
+      emailtitle.style.opacity = '1';
+      pwtitle.style.opacity = '1';
+      emailInput.style.opacity = '1';
+      passwordInput.style.opacity = '1';
+      emailcaption.style.opacity = '0';
+      pwcaption.style.opacity = '0';
+
+      // animate logo / text upward
+      logo.style.top = '80px';
+      text.style.top = '180px';
+
+      // center the active button under the rectangle
+      triggerBtn.classList.add('centered');
+      triggerBtn.style.top = '570px';
+      triggerBtn.style.left = '50%';
+      triggerBtn.style.transform = 'translateX(-50%)';
+
+      // hide the other button completely
+      otherBtn.classList.add('hidden');
+
+      // autofocus input for convenience
+      setTimeout(() => emailInput.focus(), 650);
+    }
+
+    // hide form (restore original state)
+    function hideForm(triggerBtn, otherBtn) {
+      formVisible = false;
+      currentMode = null;
+
+      bgRect.style.opacity = '0';
+      bgRect.style.transform = 'translateY(0)';
+
+      emailtitle.style.opacity = '0';
+      pwtitle.style.opacity = '0';
+      emailInput.style.opacity = '0';
+      passwordInput.style.opacity = '0';
+      emailcaption.style.opacity = '0';
+      pwcaption.style.opacity = '0';
+
+      // move logo / text back
+      logo.style.top = '300px';
+      text.style.top = '400px';
+
+      // restore both buttons original positions
+      triggerBtn.classList.remove('centered');
+      triggerBtn.style.top = '470px';
+      triggerBtn.style.left = (triggerBtn.id === 'logInBtn') ? '800px' : '544px';
+      triggerBtn.style.transform = 'none';
+
+      otherBtn.classList.remove('hidden');
+      // clear fields and errors
+      emailInput.value = '';
+      passwordInput.value = '';
+      clearFieldError(emailInput, emailcaption);
+      clearFieldError(passwordInput, pwcaption);
+    }
+
+    // --- Event handlers (Sign Up and Log In) ---
+
+    // Sign Up button - two-stage: show -> perform signup
+    signUpBtn.addEventListener('click', async function (e) {
+      e.preventDefault();
+
+      // First click shows the form
+      if (!formVisible) {
+        revealForm('signup', signUpBtn, logInBtn);
+        return;
       }
 
-      function showFieldError(inputEl, captionEl, message) {
-        inputEl.style.borderColor = '#e74c3c';
-        captionEl.textContent = message;
-        captionEl.style.color = '#e74c3c';
-        captionEl.style.opacity = '1';
+      // Second click: proceed with validation + Firebase sign up
+      const emailVal = (emailInput.value || '').trim();
+      const pwVal = (passwordInput.value || '').trim();
+
+      clearFieldError(emailInput, emailcaption);
+      clearFieldError(passwordInput, pwcaption);
+
+      if (!emailVal) {
+        showFieldError(emailInput, emailcaption, 'Email is required');
+        emailInput.focus();
+        return;
+      }
+      if (!isValidEmail(emailVal)) {
+        showFieldError(emailInput, emailcaption, 'Please enter a valid email');
+        emailInput.focus();
+        return;
+      }
+      if (!pwVal) {
+        showFieldError(passwordInput, pwcaption, 'Password is required');
+        passwordInput.focus();
+        return;
+      }
+      if (pwVal.length < 6) {
+        showFieldError(passwordInput, pwcaption, 'Password must be at least 6 characters');
+        passwordInput.focus();
+        return;
       }
 
-      function clearFieldError(inputEl, captionEl) {
-        inputEl.style.borderColor = '#aaa';
-        captionEl.textContent = '';
-        captionEl.style.opacity = '0';
-      }
+      // disable the button to prevent double submissions while waiting
+      signUpBtn.disabled = true;
+      signUpBtn.textContent = 'Signing up...';
 
-      signUpBtn.addEventListener('click', function() {
-        if (!formVisible) {
-          // First click: show the form inside the rectangle
-          bgRect.style.transition = 'opacity 0.6s ease-in-out';
-          bgRect.style.opacity = '1';
-          emailtitle.style.transition = 'opacity 0.6s ease-in-out';
-          emailtitle.style.opacity = '1';
-          pwtitle.style.transition = 'opacity 0.6s ease-in-out';
-          pwtitle.style.opacity = '1';
-          emailInput.style.transition = 'opacity 0.6s ease-in-out';
-          emailInput.style.opacity = '1';
-          passwordInput.style.transition = 'opacity 0.6s ease-in-out';
-          passwordInput.style.opacity = '1';
-
-          // Animate logo moving up
-          logo.style.transition = 'top 0.6s ease-in-out';
-          logo.style.top = '80px';
-          // Animate text moving up
-          text.style.transition = 'top 0.6s ease-in-out';
-          text.style.top = '180px';
-          // Move Sign Up button down below the rectangle and center it
-          signUpBtn.style.transition = 'top 0.6s ease-in-out, left 0.6s ease-in-out';
-          signUpBtn.style.top = '570px';
-          signUpBtn.style.left = '47%';
-          signUpBtn.style.transform = 'translateX(-50%)';
-          // Hide Log In button
-          logInBtn.style.transition = 'opacity 0.6s ease-in-out';
-          logInBtn.style.opacity = '0';
-
-          formVisible = true;
-          // update label so user knows next press will submit
-          signUpBtn.dataset.originalText = signUpBtn.textContent;
-          signUpBtn.textContent = 'Sign In';
-        } else {
-          // Second click: validate before navigating
-          const emailVal = (emailInput.value || '').trim();
-          const pwVal = (passwordInput.value || '').trim();
-          // clear previous errors
-          clearFieldError(emailInput, emailcaption);
-          clearFieldError(passwordInput, pwcaption);
-
-          if (!emailVal) {
-            showFieldError(emailInput, emailcaption, 'Email is required');
-            emailInput.focus();
-            return;
-          }
-          if (!isValidEmail(emailVal)) {
-            showFieldError(emailInput, emailcaption, 'Please enter a valid email');
-            emailInput.focus();
-            return;
-          }
-          if (!pwVal) {
-            showFieldError(passwordInput, pwcaption, 'Password is required');
-            passwordInput.focus();
-            return;
-          }
-
-          // All client-side checks passed — proceed to homepage
-          firebaseSignUp(emailVal, pwVal);
-          //window.location.href = '../cocurr-homepage/homepage.html';
-        }
-      });
-      
-      logInBtn.addEventListener('click', function() {
-        if (!formVisible) {
-          bgRect.style.transition = 'opacity 0.6s ease-in-out';
-          bgRect.style.opacity = '1';
-          emailtitle.style.transition = 'opacity 0.6s ease-in-out';
-          emailtitle.style.opacity = '1';
-          pwtitle.style.transition = 'opacity 0.6s ease-in-out';
-          pwtitle.style.opacity = '1';
-          emailInput.style.transition = 'opacity 0.6s ease-in-out';
-          emailInput.style.opacity = '1';
-          passwordInput.style.transition = 'opacity 0.6s ease-in-out';
-          passwordInput.style.opacity = '1';
-          // Animate logo moving up
-          logo.style.transition = 'top 0.6s ease-in-out';
-          logo.style.top = '80px';
-          // Animate text moving up
-          text.style.transition = 'top 0.6s ease-in-out';
-          text.style.top = '180px';
-          // Move Log In button down below the rectangle and center it
-          logInBtn.style.transition = 'top 0.6s ease-in-out, left 0.6s ease-in-out';
-          logInBtn.style.top = '570px';
-          logInBtn.style.left = '47%';
-          logInBtn.style.transform = 'translateX(-50%)';
-          // Hide Sign Up button
-          signUpBtn.style.transition = 'opacity 0.6s ease-in-out';
-          signUpBtn.style.opacity = '0';
-
-          formVisible = true;
-          logInBtn.dataset.originalText = logInBtn.textContent;
-          logInBtn.textContent = 'Sign In';
-        } else {
-          // validate before sending to server
-          const emailVal = (emailInput.value || '').trim();
-          const pwVal = (passwordInput.value || '').trim();
-          clearFieldError(emailInput, emailcaption);
-          clearFieldError(passwordInput, pwcaption);
-          if (!emailVal) {
-            showFieldError(emailInput, emailcaption, 'Email is required');
-            emailInput.focus();
-            return;
-          }
-          if (!isValidEmail(emailVal)) {
-            showFieldError(emailInput, emailcaption, 'Please enter a valid email');
-            emailInput.focus();
-            return;
-          }
-          if (!pwVal) {
-            showFieldError(passwordInput, pwcaption, 'Password is required');
-            passwordInput.focus();
-            return;
-          }
-
-          // send credentials to server for verification
-          fetch('../cocurr/login.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: emailVal, password: pwVal }),
-            credentials: 'include'
-          })
-          .then(r => r.json().then(j => ({ status: r.status, json: j })))
-          .then(({ status, json }) => {
-            if (status === 200 && json.ok) {
-              // successful login — redirect to homepage
-              //window.location.href = '../cocurr-homepage/homepage.html';
-              firebaseLogin(emailVal, pwVal);
-            } else {
-              // show error returned by server
-              const message = json && json.error ? json.error : 'Login failed';
-              showFieldError(passwordInput, pwcaption, message);
-            }
-          })
-          .catch(err => {
-            showFieldError(passwordInput, pwcaption, 'Network or server error');
-            console.error(err);
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, emailVal, pwVal);
+        // create a minimal Firestore profile
+        try {
+          await setDoc(doc(db, 'users', cred.user.uid), {
+            email: emailVal,
+            createdAt: new Date().toISOString()
           });
+        } catch (fireErr) {
+          // non-fatal — log but still continue
+          console.error('Firestore write failed', fireErr);
         }
-      });
+        // redirect on success
+        window.location.href = "../cocurr-homepage/homepage.html";
+      } catch (err) {
+        showFieldError(passwordInput, pwcaption, err.message || 'Sign up failed');
+        console.error(err);
+        signUpBtn.disabled = false;
+        signUpBtn.textContent = 'Sign Up';
+      }
+    });
 
+    // Log In button - two-stage: show -> perform login
+    logInBtn.addEventListener('click', async function (e) {
+      e.preventDefault();
 
-    </script>
-  </body>
+      if (!formVisible) {
+        revealForm('login', logInBtn, signUpBtn);
+        return;
+      }
+
+      const emailVal = (emailInput.value || '').trim();
+      const pwVal = (passwordInput.value || '').trim();
+
+      clearFieldError(emailInput, emailcaption);
+      clearFieldError(passwordInput, pwcaption);
+
+      if (!emailVal) {
+        showFieldError(emailInput, emailcaption, 'Email is required');
+        emailInput.focus();
+        return;
+      }
+      if (!isValidEmail(emailVal)) {
+        showFieldError(emailInput, emailcaption, 'Please enter a valid email');
+        emailInput.focus();
+        return;
+      }
+      if (!pwVal) {
+        showFieldError(passwordInput, pwcaption, 'Password is required');
+        passwordInput.focus();
+        return;
+      }
+
+      logInBtn.disabled = true;
+      logInBtn.textContent = 'Signing in...';
+
+      try {
+        await signInWithEmailAndPassword(auth, emailVal, pwVal);
+        window.location.href = "../cocurr-homepage/homepage.html";
+      } catch (err) {
+        showFieldError(passwordInput, pwcaption, err.message || 'Login failed');
+        console.error(err);
+        logInBtn.disabled = false;
+        logInBtn.textContent = 'Log In';
+      }
+    });
+
+    // Allow user to press Escape to close the form and restore the UI
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && formVisible) {
+        // determine which button is currently centered
+        const centeredBtn = document.querySelector('.centered');
+        if (centeredBtn) {
+          const otherBtn = centeredBtn.id === 'logInBtn' ? signUpBtn : logInBtn;
+          hideForm(centeredBtn, otherBtn);
+        } else {
+          // fallback: restore both
+          hideForm(signUpBtn, logInBtn);
+        }
+      }
+    });
+
+    // Click outside the form rectangle should close it (nice touch)
+    document.addEventListener('click', (ev) => {
+      if (!formVisible) return;
+      const insideRect = bgRect.contains(ev.target) || emailInput.contains(ev.target) || passwordInput.contains(ev.target);
+      const centeredBtn = document.querySelector('.centered');
+      const clickedBtn = ev.target.closest('button');
+      if (clickedBtn) return; // clicking buttons should not close
+      if (!insideRect) {
+        if (centeredBtn) {
+          const otherBtn = centeredBtn.id === 'logInBtn' ? signUpBtn : logInBtn;
+          hideForm(centeredBtn, otherBtn);
+        } else {
+          hideForm(signUpBtn, logInBtn);
+        }
+      }
+    });
+
+    // safety: on page load ensure initial positions are correct
+    window.addEventListener('load', () => {
+      logo.style.top = '300px';
+      text.style.top = '400px';
+      bgRect.style.opacity = '0';
+      emailtitle.style.opacity = '0';
+      pwtitle.style.opacity = '0';
+      emailInput.style.opacity = '0';
+      passwordInput.style.opacity = '0';
+    });
+
+  </script>
+</body>
 </html>

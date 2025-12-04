@@ -15,14 +15,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 Make sign-up function available to index.html
-export function firebaseSignUp(email, password) {
+
+export function firebaseSignUp(email, password) {// make sign-up function available to index.html
   createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCred) => {
       const uid = userCred.user.uid;
 
-      // Create user profile in Firestore
-      await setDoc(doc(db, "users", uid), {
+      
+      await setDoc(doc(db, "users", uid), {// init user profile in Firestore
         email: email,
         createdAt: new Date()
       });
@@ -34,7 +34,7 @@ export function firebaseSignUp(email, password) {
     });
 }
 
-// 🔥 Make login function available
+// Make login function available
 export function firebaseLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
