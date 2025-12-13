@@ -95,14 +95,16 @@ profileIcon.addEventListener('click', function() {
 /**
  * Handle select all checkbox
  */
-selectAllCheckbox.addEventListener('change', function() {
-    // Select/deselect all task checkboxes
-    taskCheckboxes.forEach(checkbox => {
-        if (checkbox !== selectAllCheckbox) {
-            checkbox.checked = this.checked;
-        }
+if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener('change', function() {
+        // Select/deselect all task checkboxes
+        taskCheckboxes.forEach(checkbox => {
+            if (checkbox !== selectAllCheckbox) {
+                checkbox.checked = this.checked;
+            }
+        });
     });
-});
+}
 
 /**
  * Handle individual task checkbox changes
@@ -118,6 +120,7 @@ taskCheckboxes.forEach(checkbox => {
  * Update select all checkbox based on individual checkbox states
  */
 function updateSelectAllCheckbox() {
+    if (!selectAllCheckbox) return;
     const totalCheckboxes = taskCheckboxes.length - 1; // Exclude select all checkbox
     const checkedCheckboxes = Array.from(taskCheckboxes).filter(cb => cb.checked && cb !== selectAllCheckbox).length;
     
@@ -148,10 +151,15 @@ taskRows.forEach(row => {
  * @param {HTMLElement} row - Task row element
  */
 function openTaskDetails(row) {
-    const taskName = row.querySelector('.task-name').textContent.trim();
-    const status = row.querySelector('.status-badge').textContent.trim();
-    const deadline = row.querySelector('.deadline').textContent.trim();
-    const course = row.querySelector('.course-code').textContent.trim();
+    const taskNameEl = row.querySelector('.task-name') || row.querySelector('.task-bubble') || row.querySelector('.task-content');
+    const statusEl = row.querySelector('.status-badge') || row.querySelector('.wip-bubble') || row.querySelector('.status-input');
+    const deadlineEl = row.querySelector('.deadline') || row.querySelector('.deadline-cell') || row.querySelector('.deadline-bubble');
+    const courseEl = row.querySelector('.course-code') || row.querySelector('.cscc-bubble') || row.querySelector('.course-cell');
+
+    const taskName = taskNameEl ? taskNameEl.textContent.trim() : '';
+    const status = statusEl ? statusEl.textContent.trim() : '';
+    const deadline = deadlineEl ? deadlineEl.textContent.trim() : '';
+    const course = courseEl ? courseEl.textContent.trim() : '';
     
     console.log('Task Details:', {
         name: taskName,
@@ -267,6 +275,8 @@ function initDashboard() {
     
     // Update select all checkbox state on load
     updateSelectAllCheckbox();
+    // Set up task row interactions (check/edit/delete/add)
+    setupTaskInteractions();
 }
 
 // Initialize on DOM ready

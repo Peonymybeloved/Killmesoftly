@@ -399,6 +399,62 @@ button, input {
    SIDEBAR STYLES
    =========================== */
 
+/* Action buttons (more / edit / delete) for table rows */
+.tasks-table .dot-space {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.tasks-table .more-btn {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 6px 8px;
+    color: rgba(13,58,55,0.9);
+}
+
+/* Hidden by default — shown when row has .show-actions */
+.tasks-table .row-actions,
+.tasks-table .task-actions {
+    display: none;
+    gap: 8px;
+    align-items: center;
+}
+
+.tasks-table .edit-btn,
+.tasks-table .delete-btn {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+}
+.tasks-table .edit-btn { background: var(--accent); color: #fff; }
+.tasks-table .delete-btn { background: #e94b35; color: #fff; }
+
+/* When toggled, show the actions inline */
+.tasks-table .task-row.show-actions .row-actions,
+.tasks-table .task-row.show-actions .task-actions {
+    display: flex;
+}
+
+/* Small visual for checked rows */
+.tasks-table .task-row.checked .task-content {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Make the action buttons slightly smaller on narrow screens */
+@media (max-width: 768px) {
+    .tasks-table .more-btn { font-size: 18px; }
+    .tasks-table .edit-btn, .tasks-table .delete-btn { padding: 6px 8px; font-size: 12px; }
+}
+
 .sidebar {
     width: 80px;
     background: #ffffff;

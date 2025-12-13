@@ -1,5 +1,33 @@
 const taskTable = document.getElementById('task-table');
-const addBtn = document.getElementById('add-task-btn');
+const plusBtn = document.querySelector('.plus-btn');
+
+function createEditableTaskRow() {
+  const row = document.createElement('div');
+  row.className = 'task-row';
+
+  row.innerHTML = `
+    <div class="check-task"></div>
+    <div class="task-bubble" contenteditable="true" placeholder="Task name"></div>
+    <div class="deadline-bubble" contenteditable="true" placeholder="Deadline"></div>
+    <div class="wip-bubble" contenteditable="true" placeholder="Status"></div>
+    <div class="cscc-bubble" contenteditable="true" placeholder="Course"></div>
+    <div class="dot-space">
+      <button class="more-btn">...</button>
+      <div class="task-actions">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </div>
+  `;
+
+  addTaskRowListeners(row);
+  // Insert before the plus button row
+  const addRow = taskTable.querySelector('.add-row');
+  taskTable.insertBefore(row, addRow);
+  
+  // Focus on task bubble
+  row.querySelector('.task-bubble').focus();
+}
 
 function createTaskRow(task, deadline, status, course) {
   const row = document.createElement('div');
@@ -21,7 +49,9 @@ function createTaskRow(task, deadline, status, course) {
   `;
 
   addTaskRowListeners(row);
-  taskTable.appendChild(row);
+  // Insert before the plus button row
+  const addRow = taskTable.querySelector('.add-row');
+  taskTable.insertBefore(row, addRow);
 }
 
 function addTaskRowListeners(row) {
@@ -55,29 +85,13 @@ function addTaskRowListeners(row) {
   deleteBtn.addEventListener('click', () => row.remove());
 }
 
+// Add event listener to plus button
+if (plusBtn) {
+  plusBtn.addEventListener('click', createEditableTaskRow);
+}
+
 // Initialize existing rows
-document.querySelectorAll('.task-row').forEach(addTaskRowListeners);
-
-// Toggle checked state and strike-through
-check.addEventListener('click', () => {
-  check.classList.toggle('checked');
-  row.classList.toggle('checked'); // applies strike-through to bubbles
-});
-
-
-// Add new task
-addBtn.addEventListener('click', () => {
-  const task = document.getElementById('new-task-input').value.trim();
-  const deadline = document.getElementById('new-deadline-input').value.trim();
-  const status = document.getElementById('new-status-input').value.trim();
-  const course = document.getElementById('new-course-input').value.trim();
-  if (!task) return;
-  createTaskRow(task, deadline, status, course);
-  document.getElementById('new-task-input').value = '';
-  document.getElementById('new-deadline-input').value = '';
-  document.getElementById('new-status-input').value = '';
-  document.getElementById('new-course-input').value = '';
-});
+document.querySelectorAll('.task-row:not(.add-row)').forEach(addTaskRowListeners);
 
 
 
