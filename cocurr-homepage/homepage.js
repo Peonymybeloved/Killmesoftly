@@ -38,8 +38,9 @@ function createEditableTaskRow() {
     </div>
   `;
 
-  addTaskRowListeners(row);
-
+  const wipBubble = row.querySelector('.wip-bubble');
+  wipBubble.className = 'wip-bubble ' + status.toLowerCase();
+  wipBubble.appendChild(makeStatusSpan(status));
   const addRow = taskTable.querySelector('.add-row');
   taskTable.insertBefore(row, addRow);
 
@@ -47,34 +48,85 @@ function createEditableTaskRow() {
   showPopup("Task added! Fill all fields to complete.", "yellow");
 }
 
-function createTaskRow(task, deadline, status, course) {
-  if (!task || !deadline || !status || !course) {
-    showPopup("Please fill all fields!", "red");
-    return;
+// ====================== EDIT MODE ======================
+function toggleRowEdit(row, enable) {
+  const task = row.querySelector('.task-bubble');
+  const deadline = row.querySelector('.deadline-bubble');
+  const course = row.querySelector('.cscc-bubble');
+  const statusBox = row.querySelector('.wip-bubble');
+
+  task.contentEditable = enable;
+  course.contentEditable = enable;
+
+  if (enable) {
+    // Convert deadline to datetime input
+    const deadlineValue = deadline.textContent.trim();
+    deadline.innerHTML = '';
+    const input = document.createElement('input');
+    input.type = 'datetime-local';
+    input.className = 'deadline-input';
+    input.value = deadlineValue;
+    deadline.appendChild(input);
+    input.focus();
+
+    // Status: convert to select
+    const cur = statusBox.textContent.trim();
+    statusBox.innerHTML = '';
+    const select = makeStatusSelect(cur);
+    statusBox.appendChild(select);
+
+    // Apply initial color class to statusBox based on current status
+    statusBox.className = 'wip-bubble ' + cur.toLowerCase();
+
+    // Add change listener to update bubble color in real-time
+    select.addEventListener('change', (e) => {
+      const selectedValue = e.target.value;
+      statusBox.className = 'wip-bubble ' + selectedValue.toLowerCase();
+    });
+  } else {
+    // Revert deadline to text display
+    const input = deadline.querySelector('input[type="datetime-local"]');
+    const value = input ? input.value : '';
+    deadline.innerHTML = '';
+    deadline.textContent = value;
+
+    // Status: convert select back to span
+    const sel = statusBox.querySelector('select');
+    const selectedStatus = sel.value;
+    statusBox.innerHTML = '';
+    statusBox.className = 'wip-bubble ' + selectedStatus.toLowerCase();
+    statusBox.appendChild(makeStatusSpan(selectedStatus));
   }
 
-  const row = document.createElement('div');
-  row.className = 'task-row';
+// ====================== FIRESTORE SAVE ======================
+async function saveTask(row) {
+  if (!currentUser) return;
 
-  row.innerHTML = `
-    <div class="check-task"></div>
-    <div class="task-bubble" contenteditable="false">${task}</div>
-    <div class="deadline-bubble" contenteditable="false">${deadline}</div>
-    <div class="wip-bubble" contenteditable="false">${status}</div>
-    <div class="cscc-bubble" contenteditable="false">${course}</div>
-    <div class="dot-space">
-      <button class="more-btn">...</button>
-      <div class="task-actions">
-        <button class="edit-btn">Edit</button>
-        <button class="delete-btn">Delete</button>
-      </div>
-    </div>
-  `;
+  const deadlineInput = row.querySelector('.deadline-bubble input[type="datetime-local"]');
+  const deadlineValue = deadlineInput ? deadlineInput.value : row.querySelector('.deadline-bubble').textContent.trim();
 
-  addTaskRowListeners(row);
+  const data = {
+    task: row.querySelector('.task-bubble').textContent.trim(),
+    deadline: deadlineValue,
+    status: row.querySelector('.wip-bubble select')
+      ? row.querySelector('.wip-bubble select').value
+      : row.querySelector('.wip-bubble').textContent.trim(),
+    course: row.querySelector('.cscc-bubble').textContent.trim(),
+    createdAt: new Date()
+  };
 
-  const addRow = taskTable.querySelector('.add-row');
-  taskTable.insertBefore(row, addRow);
+  if (row.dataset.taskId) {
+    await updateDoc(
+      doc(db, "users", currentUser.uid, "tasks", row.dataset.taskId),
+      data
+    );
+  } else {
+    const ref = await addDoc(
+      collection(db, "users", currentUser.uid, "tasks"),
+      data
+    );
+    row.dataset.taskId = ref.id;
+  }
 }
 
 /* ---------------- LISTENERS ---------------- */
