@@ -7,8 +7,7 @@ class Task {
     }
 
     // Add a new task
-    public function addTask($title, $description, $dueDate, $course) {
-        $status = "Pending";
+    public function addTask($title, $description, $dueDate, $course, $status = "WIP") {
         $sql = "INSERT INTO tasks (taskTitle, taskDescription, dueDate, taskStatus, taskCourse)
                 VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
