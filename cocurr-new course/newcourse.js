@@ -7,20 +7,23 @@ const STATUS_OPTIONS = [
   { value: 'Revise', label: 'Revise', cls: 'revise' },
   { value: 'Ready', label: 'Ready', cls: 'ready' }
 ];
-const routes = [
+// ====================== SIDEBAR NAV (ROBUST FIX) ======================
+const sidebarRoutes = [
   '../cocurr-homepage/homepage.html',
-  'dailytask.html',
+  '../cocurr-dailytask/dailytask.html',
   '../cocurr-coursefolder/course.html'
 ];
 
-// ====================== SIDEBAR NAV ======================
 document.querySelectorAll('.sidebar-icon').forEach((icon, index) => {
-  if (routes[index]) {
-    icon.addEventListener('click', () => {
-      window.location.href = routes[index];
-    });
-  }
+  icon.addEventListener('click', () => {
+    const target = sidebarRoutes[index];
+    if (target) {
+      window.location.assign(target);
+    }
+  });
 });
+
+
 function makeStatusSpan(status) {
   const span = document.createElement('div');
   span.className = 'status-span ' + (status ? status.toLowerCase() : 'wip');
@@ -159,14 +162,6 @@ if (plusBtn) {
   plusBtn.addEventListener('click', (e) => {
     // Optionally create a visual placeholder or record in localStorage here
     window.location.href = '../cocurr-new%20course/newcourse.html';
-  });
-}
-
-// Sidebar first icon navigates to homepage
-const sidebarIcons = document.querySelectorAll('.sidebar-icon');
-if (sidebarIcons && sidebarIcons.length > 0) {
-  sidebarIcons[0].addEventListener('click', () => {
-    window.location.href = '../cocurr-homepage/homepage.html';
   });
 }
 
