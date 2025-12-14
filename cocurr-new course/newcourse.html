@@ -39,10 +39,24 @@
           <label for="courseDescription">Course Description</label>
           <textarea id="courseDescription" placeholder="Enter course description" class="course-description-input" rows="4"></textarea>
         </div>
+        <div class="course-info-middle">
+          <label>Schedule - Days</label>
+          <div class="days-picker">
+            <label class="day-checkbox"><input type="checkbox" value="Monday"> Mon</label>
+            <label class="day-checkbox"><input type="checkbox" value="Tuesday"> Tue</label>
+            <label class="day-checkbox"><input type="checkbox" value="Wednesday"> Wed</label>
+            <label class="day-checkbox"><input type="checkbox" value="Thursday"> Thu</label>
+            <label class="day-checkbox"><input type="checkbox" value="Friday"> Fri</label>
+            <label class="day-checkbox"><input type="checkbox" value="Saturday"> Sat</label>
+            <label class="day-checkbox"><input type="checkbox" value="Sunday"> Sun</label>
+          </div>
+          <label for="scheduleTime">Schedule - Time</label>
+          <input type="time" id="scheduleTime" class="schedule-time-input">
+        </div>
         <div class="course-info-right">
+          <button id="confirmBtn" class="confirm-btn">Confirm</button>
           <label for="teacherName">Instructor</label>
           <input type="text" id="teacherName" placeholder="Enter instructor name" class="teacher-input">
-          <button id="confirmBtn" class="confirm-btn">Confirm</button>
         </div>
       </div>
     </div>
