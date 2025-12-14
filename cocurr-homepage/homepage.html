@@ -7,8 +7,13 @@
   <link rel="stylesheet" href="homepage.css">
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 </head>
+<style>       
+</style>
 <body>
   <div class="container">
+
+    <!-- Background Rectangle -->
+    <div id="bgRect"></div>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -19,6 +24,8 @@
 
     <!-- Logo -->
     <div class="cocurr-logo"></div>
+    <!-- Profile circle (top-right) -->
+    <div id="profileCircle">T</div>
 
     <!-- Table Headers -->
     <div class="table-headers">
@@ -30,51 +37,17 @@
       <div class="header actions-header"></div>
     </div>
 
+    
     <!-- Task Table -->
     <div class="task-table" id="task-table">
-      <div class="task-row">
-        <div class="check-task"></div>
-        <div class="task-bubble" contenteditable="false">Do CSCC 32 B Prototype</div>
-        <div class="deadline-bubble" contenteditable="false">Sep 21</div>
-        <div class="wip-bubble" contenteditable="false">WIP</div>
-        <div class="cscc-bubble" contenteditable="false">CSCC3</div>
-        <div class="dot-space">
-          <button class="more-btn">...</button>
-          <div class="task-actions">
-            <button class="edit-btn">Edit</button>
-            <button class="delete-btn">Delete</button>
-          </div>
-        </div>
+      <div class="task-row add-row">
+        <div class="plus-btn">+</div>
       </div>
-
-      <div class="task-row">
-        <div class="check-task"></div>
-        <div class="task-bubble" contenteditable="false">Prepare Lecture Notes</div>
-        <div class="deadline-bubble" contenteditable="false">Sep 25</div>
-        <div class="wip-bubble" contenteditable="false">WIP</div>
-        <div class="cscc-bubble" contenteditable="false">CSCC1</div>
-        <div class="dot-space">
-          <button class="more-btn">...</button>
-          <div class="task-actions">
-            <button class="edit-btn">Edit</button>
-            <button class="delete-btn">Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add New Task Row -->
-    <div class="add-task-row">
-      <input type="text" id="new-task-input" placeholder="New Task">
-      <input type="text" id="new-deadline-input" placeholder="Deadline">
-      <input type="text" id="new-status-input" placeholder="Status">
-      <input type="text" id="new-course-input" placeholder="Course">
-      <button id="add-task-btn">Add Task</button>
     </div>
 
   </div>
 
-  <script src="homepage.js"></script>
+  <script type="module" src="homepage.js"></script>
 </body>
 </html>
 
