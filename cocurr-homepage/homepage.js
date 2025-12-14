@@ -100,7 +100,9 @@ function createTaskRow(task = '', deadline = '', status = 'WIP', course = '') {
     </div>
   `;
 
-  row.querySelector('.wip-bubble').appendChild(makeStatusSpan(status));
+  const wipBubble = row.querySelector('.wip-bubble');
+  wipBubble.className = 'wip-bubble ' + status.toLowerCase();
+  wipBubble.appendChild(makeStatusSpan(status));
   const addRow = taskTable.querySelector('.add-row');
   taskTable.insertBefore(row, addRow);
   return row;
@@ -121,17 +123,46 @@ function toggleRowEdit(row, enable) {
   const statusBox = row.querySelector('.wip-bubble');
 
   task.contentEditable = enable;
-  deadline.contentEditable = enable;
   course.contentEditable = enable;
 
   if (enable) {
+    // Convert deadline to datetime input
+    const deadlineValue = deadline.textContent.trim();
+    deadline.innerHTML = '';
+    const input = document.createElement('input');
+    input.type = 'datetime-local';
+    input.className = 'deadline-input';
+    input.value = deadlineValue;
+    deadline.appendChild(input);
+    input.focus();
+
+    // Status: convert to select
     const cur = statusBox.textContent.trim();
     statusBox.innerHTML = '';
-    statusBox.appendChild(makeStatusSelect(cur));
+    const select = makeStatusSelect(cur);
+    statusBox.appendChild(select);
+
+    // Apply initial color class to statusBox based on current status
+    statusBox.className = 'wip-bubble ' + cur.toLowerCase();
+
+    // Add change listener to update bubble color in real-time
+    select.addEventListener('change', (e) => {
+      const selectedValue = e.target.value;
+      statusBox.className = 'wip-bubble ' + selectedValue.toLowerCase();
+    });
   } else {
+    // Revert deadline to text display
+    const input = deadline.querySelector('input[type="datetime-local"]');
+    const value = input ? input.value : '';
+    deadline.innerHTML = '';
+    deadline.textContent = value;
+
+    // Status: convert select back to span
     const sel = statusBox.querySelector('select');
+    const selectedStatus = sel.value;
     statusBox.innerHTML = '';
-    statusBox.appendChild(makeStatusSpan(sel.value));
+    statusBox.className = 'wip-bubble ' + selectedStatus.toLowerCase();
+    statusBox.appendChild(makeStatusSpan(selectedStatus));
   }
 }
 
@@ -139,9 +170,12 @@ function toggleRowEdit(row, enable) {
 async function saveTask(row) {
   if (!currentUser) return;
 
+  const deadlineInput = row.querySelector('.deadline-bubble input[type="datetime-local"]');
+  const deadlineValue = deadlineInput ? deadlineInput.value : row.querySelector('.deadline-bubble').textContent.trim();
+
   const data = {
     task: row.querySelector('.task-bubble').textContent.trim(),
-    deadline: row.querySelector('.deadline-bubble').textContent.trim(),
+    deadline: deadlineValue,
     status: row.querySelector('.wip-bubble select')
       ? row.querySelector('.wip-bubble select').value
       : row.querySelector('.wip-bubble').textContent.trim(),
