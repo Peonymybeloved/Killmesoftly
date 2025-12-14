@@ -7,7 +7,20 @@ const STATUS_OPTIONS = [
   { value: 'Revise', label: 'Revise', cls: 'revise' },
   { value: 'Ready', label: 'Ready', cls: 'ready' }
 ];
+const routes = [
+  '../cocurr-homepage/homepage.html',
+  'dailytask.html',
+  '../cocurr-coursefolder/course.html'
+];
 
+// ====================== SIDEBAR NAV ======================
+document.querySelectorAll('.sidebar-icon').forEach((icon, index) => {
+  if (routes[index]) {
+    icon.addEventListener('click', () => {
+      window.location.href = routes[index];
+    });
+  }
+});
 function makeStatusSpan(status) {
   const span = document.createElement('div');
   span.className = 'status-span ' + (status ? status.toLowerCase() : 'wip');
