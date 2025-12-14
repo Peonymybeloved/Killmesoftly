@@ -1,18 +1,50 @@
+// ====================== DOM ======================
 const taskTable = document.getElementById('task-table');
 const plusBtn = document.querySelector('.plus-btn');
 
+// ====================== FIREBASE ======================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFD3eK8SmP4z_eXAoiPzNN0gRnhxyum-U",
+  authDomain: "cocurr-sofeng.firebaseapp.com",
+  projectId: "cocurr-sofeng",
+  storageBucket: "cocurr-sofeng.firebasestorage.app",
+  messagingSenderId: "387943862464",
+  appId: "1:387943862464:web:d6f4f44572d6f571fadd25"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+
+// ====================== CONSTANTS ======================
 const STATUS_OPTIONS = [
-  { value: 'WIP', label: 'WIP', cls: 'wip' },
-  { value: 'Review', label: 'Review', cls: 'review' },
-  { value: 'Revise', label: 'Revise', cls: 'revise' },
-  { value: 'Ready', label: 'Ready', cls: 'ready' }
+  { value: 'WIP', label: 'WIP' },
+  { value: 'Review', label: 'Review' },
+  { value: 'Revise', label: 'Revise' },
+  { value: 'Ready', label: 'Ready' }
 ];
+
 const routes = [
   '../cocurr-homepage/homepage.html',
   'dailytask.html',
   '../cocurr-coursefolder/course.html'
 ];
 
+// ====================== SIDEBAR NAV ======================
 document.querySelectorAll('.sidebar-icon').forEach((icon, index) => {
   if (routes[index]) {
     icon.addEventListener('click', () => {
@@ -21,11 +53,17 @@ document.querySelectorAll('.sidebar-icon').forEach((icon, index) => {
   }
 });
 
+// ====================== AUTH STATE ======================
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) loadTasksFromFirestore(user.uid);
+});
 
+// ====================== UI HELPERS ======================
 function makeStatusSpan(status) {
   const span = document.createElement('div');
-  span.className = 'status-span ' + (status ? status.toLowerCase() : 'wip');
-  span.textContent = status || '';
+  span.className = 'status-span ' + status.toLowerCase();
+  span.textContent = status;
   return span;
 }
 
@@ -42,6 +80,7 @@ function makeStatusSelect(selected) {
   return sel;
 }
 
+// ====================== ROW CREATION ======================
 function createTaskRow(task = '', deadline = '', status = 'WIP', course = '') {
   const row = document.createElement('div');
   row.className = 'task-row';
@@ -61,186 +100,135 @@ function createTaskRow(task = '', deadline = '', status = 'WIP', course = '') {
     </div>
   `;
 
-  // insert status span
-  const statusContainer = row.querySelector('.wip-bubble');
-  statusContainer.appendChild(makeStatusSpan(status));
-
-  addTaskRowListeners(row);
+  row.querySelector('.wip-bubble').appendChild(makeStatusSpan(status));
   const addRow = taskTable.querySelector('.add-row');
   taskTable.insertBefore(row, addRow);
   return row;
 }
 
-function createEditableTaskRow() {
-  // Create a new blank row and immediately toggle edit mode so user can type
-  const row = createTaskRow('', '', 'WIP', '');
-  toggleRowEdit(row, true);
-  // focus first editable field
-  const taskBubble = row.querySelector('.task-bubble');
-  if (taskBubble) taskBubble.focus();
+function createTaskRowWithId(taskId, task, deadline, status, course) {
+  const row = createTaskRow(task, deadline, status, course);
+  row.dataset.taskId = taskId;
+  addTaskRowListeners(row);
+  return row;
 }
 
+// ====================== EDIT MODE ======================
 function toggleRowEdit(row, enable) {
-  const taskBubble = row.querySelector('.task-bubble');
-  const deadlineBubble = row.querySelector('.deadline-bubble');
-  const csccBubble = row.querySelector('.cscc-bubble');
-  const statusContainer = row.querySelector('.wip-bubble');
+  const task = row.querySelector('.task-bubble');
+  const deadline = row.querySelector('.deadline-bubble');
+  const course = row.querySelector('.cscc-bubble');
+  const statusBox = row.querySelector('.wip-bubble');
+
+  task.contentEditable = enable;
+  deadline.contentEditable = enable;
+  course.contentEditable = enable;
 
   if (enable) {
-    if (taskBubble) taskBubble.contentEditable = 'true';
-    if (deadlineBubble) deadlineBubble.contentEditable = 'true';
-    if (csccBubble) csccBubble.contentEditable = 'true';
-    // replace status span with select
-    const cur = statusContainer.querySelector('.status-span');
-    const curVal = cur ? cur.textContent.trim() : 'WIP';
-    const sel = makeStatusSelect(curVal);
-    statusContainer.innerHTML = '';
-    statusContainer.appendChild(sel);
-    sel.focus();
+    const cur = statusBox.textContent.trim();
+    statusBox.innerHTML = '';
+    statusBox.appendChild(makeStatusSelect(cur));
   } else {
-    if (taskBubble) taskBubble.contentEditable = 'false';
-    if (deadlineBubble) deadlineBubble.contentEditable = 'false';
-    if (csccBubble) csccBubble.contentEditable = 'false';
-    const sel = statusContainer.querySelector('select');
-    const val = sel ? sel.value : '';
-    statusContainer.innerHTML = '';
-    statusContainer.appendChild(makeStatusSpan(val));
+    const sel = statusBox.querySelector('select');
+    statusBox.innerHTML = '';
+    statusBox.appendChild(makeStatusSpan(sel.value));
   }
 }
 
+// ====================== FIRESTORE SAVE ======================
+async function saveTask(row) {
+  if (!currentUser) return;
+
+  const data = {
+    task: row.querySelector('.task-bubble').textContent.trim(),
+    deadline: row.querySelector('.deadline-bubble').textContent.trim(),
+    status: row.querySelector('.wip-bubble select')
+      ? row.querySelector('.wip-bubble select').value
+      : row.querySelector('.wip-bubble').textContent.trim(),
+    course: row.querySelector('.cscc-bubble').textContent.trim(),
+    createdAt: new Date()
+  };
+
+  if (row.dataset.taskId) {
+    await updateDoc(
+      doc(db, "users", currentUser.uid, "tasks", row.dataset.taskId),
+      data
+    );
+  } else {
+    const ref = await addDoc(
+      collection(db, "users", currentUser.uid, "tasks"),
+      data
+    );
+    row.dataset.taskId = ref.id;
+  }
+}
+
+// ====================== LISTENERS ======================
 function addTaskRowListeners(row) {
   const check = row.querySelector('.check-task');
   const moreBtn = row.querySelector('.more-btn');
   const editBtn = row.querySelector('.edit-btn');
   const deleteBtn = row.querySelector('.delete-btn');
 
-  // Check/Uncheck with strike-through
-  if (check) {
-    check.addEventListener('click', () => {
-      row.classList.toggle('checked');
-      check.classList.toggle('checked');
-    });
-  }
+  check.addEventListener('click', () => {
+    row.classList.toggle('checked');
+    check.classList.toggle('checked');
+  });
 
-  // Show/hide Edit/Delete horizontally
-  if (moreBtn) {
-    moreBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      document.querySelectorAll('.task-row').forEach(r => {
-        if (r !== row) r.classList.remove('show-actions');
-      });
-      row.classList.toggle('show-actions');
-    });
-  }
+  moreBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.task-row').forEach(r => r.classList.remove('show-actions'));
+    row.classList.toggle('show-actions');
+  });
 
-  // Edit button toggles edit/save
-  if (editBtn) {
-    editBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isEditing = editBtn.textContent.trim().toLowerCase() === 'save';
-      if (isEditing) {
-        // save task to database
-        const taskTitle = row.querySelector('.task-bubble').textContent.trim();
-        const deadline = row.querySelector('.deadline-bubble').textContent.trim();
-        const statusEl = row.querySelector('.wip-bubble');
-        const status = statusEl.querySelector('select') ? statusEl.querySelector('select').value : statusEl.textContent.trim();
-        const course = row.querySelector('.cscc-bubble').textContent.trim();
-        
-        // Persist to backend
-        saveTaskToBackend(taskTitle, deadline, status, course);
-        
-        toggleRowEdit(row, false);
-        editBtn.textContent = 'Edit';
-      } else {
-        // enter edit mode
-        toggleRowEdit(row, true);
-        editBtn.textContent = 'Save';
-      }
-    });
-  }
+  editBtn.addEventListener('click', async () => {
+    if (editBtn.textContent === 'Save') {
+      await saveTask(row);
+      toggleRowEdit(row, false);
+      editBtn.textContent = 'Edit';
+    } else {
+      toggleRowEdit(row, true);
+      editBtn.textContent = 'Save';
+    }
+  });
 
-  // Delete task
-  if (deleteBtn) deleteBtn.addEventListener('click', (e) => { 
-    e.stopPropagation(); 
-    row.remove(); 
+  deleteBtn.addEventListener('click', async () => {
+    if (row.dataset.taskId) {
+      await deleteDoc(
+        doc(db, "users", currentUser.uid, "tasks", row.dataset.taskId)
+      );
+    }
+    row.remove();
   });
 }
 
-// Persist task to backend
-function saveTaskToBackend(taskTitle, deadline, status, course) {
-  const payload = {
-    task: taskTitle,
-    deadline: deadline,
-    status: status,
-    course: course
-  };
-
-  fetch('../cocurr-php/api_tasks.php?action=create', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      console.log('Task saved successfully');
-    } else {
-      console.error('Error saving task:', data.error);
-    }
-  })
-  .catch(error => console.error('Error:', error));
-}
-
-// Load tasks from backend on page load
-function loadTasksFromBackend() {
-  fetch('../cocurr-php/api_tasks.php?action=list')
-    .then(response => response.json())
-    .then(data => {
-      if (data.success && data.data && Array.isArray(data.data)) {
-        data.data.forEach(taskData => {
-          createTaskRow(taskData.task, taskData.deadline, taskData.status, taskData.course);
-        });
-      }
-    })
-    .catch(error => console.error('Error loading tasks:', error));
-}
-
-// Add event listener to plus button
-if (plusBtn) {
-  plusBtn.addEventListener('click', createEditableTaskRow);
-}
-
-// Initialize existing rows (convert static status spans if present)
-document.querySelectorAll('.task-row:not(.add-row)').forEach(row => {
-  // if row has a wip-bubble with inner text, wrap it into status-span
-  const statusEl = row.querySelector('.wip-bubble');
-  if (statusEl && statusEl.textContent.trim()) {
-    const val = statusEl.textContent.trim();
-    statusEl.innerHTML = '';
-    statusEl.appendChild(makeStatusSpan(val));
-  }
+// ====================== ADD NEW TASK ======================
+function createEditableTaskRow() {
+  const row = createTaskRow('', '', 'WIP', '');
+  toggleRowEdit(row, true);
   addTaskRowListeners(row);
-});
+  row.querySelector('.task-bubble').focus();
+}
 
-// Profile circle initial from localStorage `userEmail` first letter
-(function populateProfileInitial(){
+if (plusBtn) plusBtn.addEventListener('click', createEditableTaskRow);
+
+// ====================== LOAD TASKS ======================
+function loadTasksFromFirestore(uid) {
+  const col = collection(db, "users", uid, "tasks");
+
+  onSnapshot(col, (snapshot) => {
+    document.querySelectorAll('.task-row:not(.add-row)').forEach(r => r.remove());
+
+    snapshot.forEach(docSnap => {
+      const d = docSnap.data();
+      createTaskRowWithId(docSnap.id, d.task, d.deadline, d.status, d.course);
+    });
+  });
+}
+
+// ====================== PROFILE INITIAL ======================
+(function () {
   const profile = document.getElementById('profileCircle');
-  if (!profile) return;
-  const email = localStorage.getItem('userEmail') || '';
-  const initial = email ? email.trim().charAt(0).toUpperCase() : 'T';
-  profile.textContent = initial;
+  if (!profile || !currentUser) return;
+  profile.textContent = currentUser.email.charAt(0).toUpperCase();
 })();
-
-// Load tasks from backend on page load
-document.addEventListener('DOMContentLoaded', () => {
-  loadTasksFromBackend();
-});
-
-
-
-
-
-
-
